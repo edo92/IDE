@@ -10,7 +10,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
     alias: {
-      '@ide/util': path.resolve('libs/util/src/index.ts'),
+      '@ide/shared/util': path.resolve('libs/shared/util/src/index.ts'),
       '@ide/shared/constants': path.resolve(
         'libs/shared/constants/src/index.ts'
       ),

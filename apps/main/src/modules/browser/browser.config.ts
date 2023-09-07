@@ -25,6 +25,7 @@ export const BrowserConfig: Electron.BrowserWindowConstructorOptions = {
   icon: NativeIcon,
 
   webPreferences: {
+    webviewTag: true,
     nodeIntegration: false,
     contextIsolation: true,
     nodeIntegrationInWorker: false,

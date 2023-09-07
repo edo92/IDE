@@ -1,0 +1,48 @@
+{
+  "name": "barcode",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/barcode/src",
+  "projectType": "library",
+
+  "targets": {
+    "install": {
+      "command": "python3 -m pip install -r libs/barcode/src/lib/requirements.txt"
+    },
+    "run": {
+      "command": "python3 libs/barcode/src/lib/barcode.py"
+    },
+
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/barcode",
+        "main": "libs/barcode/src/index.ts",
+        "tsConfig": "libs/barcode/tsconfig.lib.json",
+        "assets": ["libs/barcode/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/barcode/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/barcode/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
