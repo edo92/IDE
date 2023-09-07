@@ -154,7 +154,6 @@ export const App: React.FC = () => {
   };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('-----onChange', event.target.name, event.target.value);
     form.setFieldValue(event.target.name, event.target.value);
     setReady(true);
   };

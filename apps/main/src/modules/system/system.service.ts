@@ -7,7 +7,6 @@ import { BarcodeGenerator } from '@ide/barcode';
 @Injectable()
 export class SystemService {
   public generateBarcode(form: Form) {
-    console.log('-----form', form);
     const barcode = new BarcodeGenerator(form);
     barcode.generate();
   }
