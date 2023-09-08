@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import {
-  Input,
-  Select as SelectAntd,
-  Button,
-  Form as FormAntd,
-  DatePicker as DatePickerAntd,
-  InputNumber,
-  Steps as StepsAntd,
-  Divider,
-  Upload,
-} from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { SelectDirectory } from '@ide/shared/types';
+import { Form as FormAntd } from 'antd';
+import type { Dayjs } from 'dayjs';
 
 import { IPC } from '@ide/shared/util';
 import { ChannelIPC } from '@ide/shared/constants';
+import { UploadOutlined } from '@ant-design/icons';
+import { SelectDirectory } from '@ide/shared/types';
+
+import {
+  Form,
+  Input,
+  Select,
+  Button,
+  Column,
+  Progress,
+  FormItem,
+  FormGroup,
+  sexOptions,
+  DatePicker,
+  StepButtons,
+  InputNumber,
+  eyeColorOptions,
+  hairColorOptions,
+} from '../components/form';
 import { Steps } from '../components/step';
 
 const Container = styled.div`
@@ -33,298 +41,156 @@ const Wrapper = styled.div`
   padding-top: 2rem;
 `;
 
-const Form = styled(FormAntd)`
-  display: flex;
-  flex-direction: column;
+const Header = styled.div`
+  position: relative;
   width: 100%;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2rem;
 `;
 
-const FormItem = styled(FormAntd.Item)`
-  width: 70%;
-  padding-top: 1rem;
-  .ant-form-item-control-input-content {
-    gap: 10px;
-    display: inline-grid;
-  }
-`;
-
-const TextInput = styled(Input).attrs({
-  size: 'large',
-})`
-  &::placeholder {
-    color: black;
-  }
-`;
-
-const Select = styled(SelectAntd).attrs({
-  size: 'large',
-})`
-  width: 100%;
-  justify-content: center;
-  color: #00000094;
-  span.ant-select-selection-placeholder {
-    color: #00000094;
-    gap: 10px;
-  }
-`;
-const ProgressStep = styled(StepsAntd)`
-  width: 70%;
-  justify-content: center;
-  display: flex;
-  color: #ffff;
-  .ant-steps-item-title {
-    color: #ffff !important;
-  }
-  .ant-steps-icon {
-    color: #ffff !important;
-  }
-  .ant-steps-item-icon {
-    background-color: rgb(255 247 247 / 6%) !important;
-  }
-`;
-
-const ProgressStepWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-`;
-
-const StepButtonsWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 6px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  button {
-    width: 50%;
-  }
-`;
-
-const ItemGroup = styled.div`
-  display: flex;
-  gap: 6px;
-  width: 100%;
-  justify-content: center;
-  > * {
-    width: 100%;
-  }
-`;
-
-const LightDivider = styled(Divider)`
-  min-width: 96% !important;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  background-color: rgb(255 255 255 / 14%) !important;
-`;
-
-const Space = styled.div`
-  width: 100%;
-  height: 0.4rem;
-`;
-
-const DatePicker = styled(DatePickerAntd).attrs({
-  size: 'large',
-})``;
-
-const UploadButton = styled(Input).attrs({
-  type: 'file',
-  webkitdirectory: 'true',
-})`
-  &::-webkit-file-upload-button {
-    display: none;
-    position: relative;
-  }
-`;
 export const App: React.FC = () => {
   const [form] = FormAntd.useForm();
   const [step, setStep] = useState(0);
-  const [ready, setReady] = useState(false);
 
-  const handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    event.preventDefault();
-    IPC.api.invoke(ChannelIPC.generate, {
-      firstName: form.getFieldValue('FirstName'),
-      lastName: form.getFieldValue('LastName'),
-      middleName: form.getFieldValue('MiddleName'),
-    });
+  const handleSubmit = async () => {
+    await IPC.api.invoke(ChannelIPC.getdirectory);
+  };
+
+  const handleSelectDate = (date: Dayjs | null) => {
+    form.setFieldValue('date', JSON.stringify(date));
+  };
+
+  const handleSelect = (value: unknown, name: string) => {
+    form.setFieldValue(name, value as string);
   };
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     form.setFieldValue(event.target.name, event.target.value);
-    setReady(true);
   };
 
-  const selectFolderHandler = async () => {
+  const selectDirectory = async () => {
     const dir = await IPC.api.invoke<SelectDirectory>(ChannelIPC.getdirectory);
     form.setFieldValue('directory', dir.filePaths[0]);
-    setReady(true);
   };
-
-  const StepButtons = () => (
-    <StepButtonsWrapper>
-      <Button
-        size="large"
-        type="default"
-        disabled={step === 0}
-        style={{ color: '#1677ff' }}
-        onClick={() => setStep(step - 1)}
-      >
-        Back
-      </Button>
-
-      <Button
-        size="large"
-        type="primary"
-        disabled={step === 3}
-        onClick={() => setStep(step + 1)}
-      >
-        Next
-      </Button>
-      <Button type="primary" onClick={handleSubmit}>
-        Submit
-      </Button>
-    </StepButtonsWrapper>
-  );
 
   return (
     <Container>
       <Wrapper>
-        <ProgressStepWrapper>
-          <ProgressStep
-            size="small"
-            current={step}
-            items={[
-              {
-                title: 'Finished',
-              },
-              {
-                title: 'In Progress',
-              },
-              {
-                title: 'Waiting',
-              },
-            ]}
-          />
-        </ProgressStepWrapper>
+        <Header>
+          <Progress step={step} />
+        </Header>
+
         <Form form={form}>
           <Steps step={step}>
             <FormItem>
-              <TextInput
-                type="text"
-                name="FirstName"
-                placeholder="First Name"
-                onChange={handleOnChange}
-              />
-              <TextInput
-                type="text"
-                name="LastName"
-                placeholder="Last Name"
-                onChange={handleOnChange}
-              />
-              <TextInput
-                type="text"
-                name="MiddleName"
-                placeholder="Middle Name"
-                onChange={handleOnChange}
-              />
+              <FormGroup title="Info">
+                <Input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  onChange={handleOnChange}
+                />
+                <Input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  onChange={handleOnChange}
+                />
+                <Input
+                  type="text"
+                  name="middleName"
+                  placeholder="Middle Name"
+                  onChange={handleOnChange}
+                />
+              </FormGroup>
 
-              <Space />
-
-              <TextInput type="text" placeholder="Street" />
-              <ItemGroup>
-                <TextInput type="text" placeholder="City" />
-                <TextInput type="text" placeholder="Zip" />
-              </ItemGroup>
-              <StepButtons />
+              <FormGroup title="Address">
+                <Input
+                  type="text"
+                  name="street"
+                  placeholder="Street"
+                  onChange={handleOnChange}
+                />
+                <Column>
+                  <Input
+                    type="text"
+                    name="city"
+                    placeholder="City"
+                    onChange={handleOnChange}
+                  />
+                  <Input
+                    type="text"
+                    name="zip"
+                    placeholder="Zip"
+                    onChange={handleOnChange}
+                  />
+                </Column>
+                <StepButtons step={step} setStep={setStep} />
+              </FormGroup>
             </FormItem>
 
             <FormItem>
-              <ItemGroup>
-                <Select
-                  placeholder="Person's Sex"
-                  options={[
-                    {
-                      value: 'MALE',
-                      label: 'Male',
-                    },
-                    {
-                      value: 'FEMALE',
-                      label: 'Female',
-                    },
-                  ]}
-                />
-                <Select
-                  placeholder="Eye Color"
-                  options={[
-                    {
-                      value: 'BROWN',
-                      label: 'Brown',
-                    },
-                    {
-                      value: 'BLUE',
-                      label: 'Blue',
-                    },
-                    {
-                      value: 'GREEN',
-                      label: 'Green',
-                    },
-                  ]}
-                />
-                <Select
-                  placeholder="Hair Color"
-                  options={[
-                    {
-                      value: 'BROWN',
-                      label: 'Brown',
-                    },
-                    {
-                      value: 'BLUE',
-                      label: 'Blue',
-                    },
-                    {
-                      value: 'GREEN',
-                      label: 'Green',
-                    },
-                  ]}
-                />
-              </ItemGroup>
+              <FormGroup title="Appearance">
+                <Column>
+                  <Select
+                    placeholder="Person's Sex"
+                    options={sexOptions}
+                    onChange={(val) => handleSelect(val, 'sex')}
+                  />
+                  <Select
+                    placeholder="Eye Color"
+                    options={eyeColorOptions}
+                    onChange={(val) => handleSelect(val, 'eyeColor')}
+                  />
+                  <Select
+                    placeholder="Hair Color"
+                    options={hairColorOptions}
+                    onChange={(val) => handleSelect(val, 'hairColor')}
+                  />
+                </Column>
+                <Column>
+                  <InputNumber
+                    name="height"
+                    placeholder="Height"
+                    onChange={(val) => handleSelect(val, 'height')}
+                  />
+                </Column>
+              </FormGroup>
 
-              <ItemGroup>
-                <InputNumber size="large" placeholder="Height" />
-              </ItemGroup>
-              <Space />
-              <ItemGroup>
-                <TextInput type="text" placeholder="ID Number" />
-              </ItemGroup>
-              <ItemGroup>
-                <DatePicker placeholder="Date of Birth" />
-                <DatePicker placeholder="Date of Issue" />
-                <DatePicker placeholder="Date of Expiry" />
-              </ItemGroup>
-              <StepButtons />
+              <FormGroup title="ID Info">
+                <Input type="text" placeholder="ID Number" />
+                <Column>
+                  <DatePicker
+                    placeholder="Date of Birth"
+                    onChange={handleSelectDate}
+                  />
+                  <DatePicker
+                    placeholder="Date of Issue"
+                    onChange={handleSelectDate}
+                  />
+                  <DatePicker
+                    placeholder="Date of Expiry"
+                    onChange={handleSelectDate}
+                  />
+                </Column>
+              </FormGroup>
+              <StepButtons step={step} setStep={setStep} />
             </FormItem>
-
             <FormItem>
-              {/* <input id="path-picker" type="file" webkitdirectory="true" /> */}
-              <ItemGroup style={{ textAlign: 'center' }}>
-                <h4>Select Directory</h4>
-              </ItemGroup>
-              <Button
-                id="upload-bttn"
-                icon={<UploadOutlined rev={undefined} />}
-                onClick={selectFolderHandler}
-              >
-                Select Directory
-              </Button>
-              {ready && (
-                <Button type="primary" onClick={handleSubmit}>
-                  Submit
+              <FormGroup title="Select Folder">
+                <Button
+                  id="upload-bttn"
+                  onClick={selectDirectory}
+                  icon={<UploadOutlined rev={undefined} />}
+                >
+                  Save Output To
                 </Button>
-              )}
+              </FormGroup>
+              <Button
+                type="primary"
+                onClick={handleSubmit}
+                disabled={!form.getFieldValue('directory')?.length}
+              >
+                Submit
+              </Button>
             </FormItem>
           </Steps>
         </Form>

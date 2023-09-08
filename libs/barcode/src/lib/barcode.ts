@@ -1,4 +1,4 @@
-import { execSync, spawn } from 'child_process';
+import { execSync } from 'child_process';
 
 type Form = {
   firstName: string;
@@ -8,12 +8,12 @@ type Form = {
 };
 
 export class BarcodeGenerator {
-  list: string[] = [];
   constructor(private readonly form: Form) {}
 
-  public generate(): void {
+  public async generate(): Promise<void> {
     const dirpath = '/Users/eduardjacobs/Desktop/IDE';
-    const pyProg = execSync(
+
+    const pyProg = await execSync(
       `python3 libs/barcode/src/lib/barcode.py ${dirpath} '${JSON.stringify(
         this.form
       )}'`

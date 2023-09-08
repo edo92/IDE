@@ -11,7 +11,16 @@ directory_path = sys.argv[1]
 def json_to_code():
     code_list = []
     form = json.loads(input_form)
+    code_list.append('@')
+    code_list.append('@  ANSI 636014040002DL00410288ZC03290048DLDCAC')
     
+    code_list.append('DCBNONE')
+    code_list.append('DCDNONE')
+    code_list.append('DBA02252020')
+
+    code_list.append('DCS'+form['lastName']);   
+    code_list.append('DAC'+form['firstName']);    
+    code_list.append('DAD'+form['middleName']);    
     return '\n'.join(code_list)
 
 
