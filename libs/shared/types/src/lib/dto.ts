@@ -11,6 +11,9 @@ export class FormDto {
   eyeColor: string;
   hairColor: string;
   height: number;
+  weight: number;
+
+  id: string;
   dob: object;
   doi: object;
   doe: object;
@@ -23,10 +26,12 @@ export class FormDto {
     this.firstName = form.firstName;
     this.middleName = form.middleName;
 
+    this.id = form.id;
     this.sex = form.sex;
     this.eyeColor = form.eyeColor;
     this.hairColor = form.hairColor;
     this.height = form.height;
+    this.weight = form.weight;
     this.dob = form.dob;
     this.doi = form.doi;
     this.doe = form.doe;
