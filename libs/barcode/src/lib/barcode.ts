@@ -1,23 +1,19 @@
+import * as path from 'path';
 import { execSync } from 'child_process';
-
-type Form = {
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  directory: string;
-};
+import { FormDto } from '@ide/shared/types';
 
 export class BarcodeGenerator {
-  constructor(private readonly form: Form) {}
+  constructor(
+    private readonly form: FormDto,
+    private readonly directory: string
+  ) {}
 
   public async generate(): Promise<void> {
-    const dirpath = '/Users/eduardjacobs/Desktop/IDE';
-
     try {
       await execSync(
-        `python3 libs/barcode/src/lib/barcode.py ${dirpath} '${JSON.stringify(
-          this.form
-        )}'`
+        `python3 libs/barcode/src/lib/barcode.py ${path.resolve(
+          this.directory
+        )} '${JSON.stringify(this.form)}'`
       );
     } catch (error) {
       throw new Error('Unable to generate barcode');

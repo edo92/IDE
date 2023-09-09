@@ -1,6 +1,12 @@
 #!/bin/osascript
 
+on run argv
+    set _scriptPath to item 1 of argv
+    set _filePath to item 2 of argv
 
-tell application "Adobe Photoshop 2023" -- open up Photoshop
-    do javascript "#include /Users/eduardjacobs/Desktop/psh-script/index.jsx"
-end tell -- close Photoshop
+    tell application "Adobe Photoshop 2023" -- open up Photoshop
+        do javascript "#include" & (item 1 of argv)  with arguments {_filePath}
+    end tell -- close Photoshop
+
+end run
+

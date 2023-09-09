@@ -54,12 +54,15 @@ const Header = styled.div`
 export const App: React.FC = () => {
   const [form] = FormAntd.useForm<FormDto>();
   const [step, setStep] = useState(0);
-  const [hasDirectory, setDirectory] = useState<boolean>(false);
+  const [directory, setDirectory] = useState<string>('');
 
   const handleSubmit = async () => {
     try {
       const _form = validateForm(form);
-      await IPC.api.invoke(ChannelIPC.generate, _form);
+      await IPC.api.invoke(ChannelIPC.generate, {
+        form: _form,
+        directory,
+      });
     } catch (error) {
       console.error(error);
       throw new Error(error as string);
@@ -81,7 +84,7 @@ export const App: React.FC = () => {
   const selectDirectory = async () => {
     const dir = await IPC.api.invoke<SelectDirectory>(ChannelIPC.getdirectory);
     form.setFieldValue('directory', dir.filePaths[0]);
-    setDirectory(true);
+    setDirectory(dir.filePaths[0]);
   };
 
   const handleNextStep = async () => {
@@ -257,7 +260,7 @@ export const App: React.FC = () => {
               <Button
                 type="primary"
                 onClick={handleSubmit}
-                disabled={!hasDirectory}
+                disabled={!directory.length}
               >
                 Submit
               </Button>

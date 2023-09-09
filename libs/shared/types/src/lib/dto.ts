@@ -60,8 +60,4 @@ export class FormDto {
   @IsString()
   @IsNotEmpty()
   doe!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  directory!: string;
 }

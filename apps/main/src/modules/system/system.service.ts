@@ -1,14 +1,19 @@
 import { dialog } from 'electron';
 import { Injectable } from '@ide/nest';
+
+import { Photoshop } from '@ide/photoshop';
 import { BarcodeGenerator } from '@ide/barcode';
 import { FormDto, SelectDirectory } from '@ide/shared/types';
 
 @Injectable()
 export class SystemService {
-  public async generateBarcode(form: FormDto) {
+  public async generate(form: FormDto, directory: string): Promise<void> {
     try {
-      const barcode = new BarcodeGenerator(form);
+      const photoshop = new Photoshop(directory);
+      const barcode = new BarcodeGenerator(form, directory);
+
       await barcode.generate();
+      await photoshop.start();
     } catch (error) {
       throw new Error(error);
     }

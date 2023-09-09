@@ -1,7 +1,10 @@
-# photoshop
+## Run Script
 
-This library was generated with [Nx](https://nx.dev).
+- SCRIPT_PATH -> photoshop.script.jsx
+- FILE_PATH -> /path/to/file.psd
 
-## Building
+```bash
+osascript ./run-app.osascript ${SCRIPT_PATH} ${FILE_PATH}
+```
 
-Run `nx build photoshop` to build the library.
+<br>

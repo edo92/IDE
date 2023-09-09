@@ -64,7 +64,7 @@ export const Controller = (namespace?: string) => {
  * @param param {String}
  * @description Controller method parameter decorator
  */
-export const Param = (param?: string) => {
+export const Body = (param?: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return <T>(target: T, key: string, _idx: number) => {
     const metadataKey = `__${key}_parameters`;
