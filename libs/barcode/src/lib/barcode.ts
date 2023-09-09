@@ -13,11 +13,14 @@ export class BarcodeGenerator {
   public async generate(): Promise<void> {
     const dirpath = '/Users/eduardjacobs/Desktop/IDE';
 
-    const pyProg = await execSync(
-      `python3 libs/barcode/src/lib/barcode.py ${dirpath} '${JSON.stringify(
-        this.form
-      )}'`
-    );
-    console.log('---', pyProg.toString());
+    try {
+      await execSync(
+        `python3 libs/barcode/src/lib/barcode.py ${dirpath} '${JSON.stringify(
+          this.form
+        )}'`
+      );
+    } catch (error) {
+      throw new Error('Unable to generate barcode');
+    }
   }
 }

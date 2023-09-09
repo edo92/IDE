@@ -7,8 +7,6 @@ import { FormDto, SelectDirectory } from '@ide/shared/types';
 export class SystemService {
   public async generateBarcode(form: FormDto) {
     try {
-      console.log('-------', form);
-
       const barcode = new BarcodeGenerator(form);
       await barcode.generate();
     } catch (error) {
