@@ -4,12 +4,10 @@ import { exec } from 'child_process';
 export class Photoshop {
   private readonly outputDir: string;
   private readonly scriptDir: string;
-  private readonly phsScriptPath: string;
 
   constructor(outputDir: string) {
     this.outputDir = path.resolve(outputDir);
     this.scriptDir = path.resolve('libs/photoshop/src/script');
-    this.phsScriptPath = path.join(this.scriptDir, 'photoshop.script.jsx');
   }
 
   public async start(): Promise<void> {
@@ -28,11 +26,17 @@ export class Photoshop {
   private async runMacOsScript(): Promise<void> {
     try {
       /**
-       * osascript ./${SCRIPT_PATH} ./${INPUT_FILE_PATH} ./${OUTPUT_DIR}
+       * osascript runScript.osascript  ./${SCRIPT_PATH} ./${INPUT_FILE_PATH} ./${OUTPUT_DIR}
        */
       const scriptPath = path.join(this.scriptDir, 'run-app.osascript');
+      const phsScriptPath = path.join(this.scriptDir, 'photoshop.script.jsx');
+      const inputFilePath = path.join(
+        'lib/photoshop/src/assets/FILE.psd',
+        'input.txt'
+      );
+
       await exec(
-        `osascript ${scriptPath} ${this.phsScriptPath} ${this.outputDir}}`
+        `osascript ${scriptPath} ${phsScriptPath} ${inputFilePath} ${this.outputDir}`
       );
     } catch (error) {
       throw new Error(error as string);

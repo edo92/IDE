@@ -3,9 +3,10 @@
 on run argv
     set _scriptPath to item 1 of argv
     set _filePath to item 2 of argv
+    set _outputDir to item 3 of argv
 
     tell application "Adobe Photoshop 2023" -- open up Photoshop
-        do javascript "#include" & (item 1 of argv)  with arguments {_filePath}
+        do javascript "#include" & (item 1 of argv)  with arguments {_filePath, _outputDir}
     end tell -- close Photoshop
 
 end run
