@@ -1,13 +1,14 @@
 import { dialog } from 'electron';
 import { Injectable } from '@ide/nest';
 import { BarcodeGenerator } from '@ide/barcode';
-import { SelectDirectory } from '@ide/shared/types';
-import { Form } from './system.dto';
+import { FormDto, SelectDirectory } from '@ide/shared/types';
 
 @Injectable()
 export class SystemService {
-  public async generateBarcode(form: Form) {
+  public async generateBarcode(form: FormDto) {
     try {
+      console.log('-------', form);
+
       const barcode = new BarcodeGenerator(form);
       await barcode.generate();
     } catch (error) {

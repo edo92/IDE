@@ -1,8 +1,6 @@
 import { Controller, IpcInvoke, Param } from '@ide/nest';
+import { FormDto, SelectDirectory } from '@ide/shared/types';
 import { ChannelIPC } from '@ide/shared/constants';
-import { SelectDirectory } from '@ide/shared/types';
-
-import { Form } from './system.dto';
 import { SystemService } from './system.service';
 
 @Controller()
@@ -15,7 +13,7 @@ export class SystemController {
   }
 
   @IpcInvoke(ChannelIPC.generate)
-  public async hasRegisteredSecret(@Param() form: { data: Form }) {
+  public async hasRegisteredSecret(@Param() form: { data: FormDto }) {
     return await this.system.generateBarcode(form.data);
   }
 }

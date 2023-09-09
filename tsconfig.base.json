@@ -18,6 +18,7 @@
       "@ide/barcode": ["libs/barcode/src/index.ts"],
       "@ide/nest": ["libs/nest/src/index.ts"],
       "@ide/photoshop": ["libs/photoshop/src/index.ts"],
+      "@ide/shared": ["libs/shared/src/index.ts"],
       "@ide/shared/assets": ["libs/shared/assets/src/index.ts"],
       "@ide/shared/constants": ["libs/shared/constants/src/index.ts"],
       "@ide/shared/types": ["libs/shared/types/src/index.ts"],

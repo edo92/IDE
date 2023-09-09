@@ -1,7 +1,7 @@
-# shared-util
+# shared
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Building
 
-Run `nx build shared-util` to build the library.
+Run `nx build shared` to build the library.

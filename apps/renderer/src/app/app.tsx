@@ -26,7 +26,10 @@ import {
   FormItem,
 } from '../components/form';
 import { Steps } from '../components/step';
-import { formValidation } from '../components/form/form-validator';
+import {
+  validateForm,
+  validateFormOnStep,
+} from '../components/form/form-validator';
 
 const Container = styled.div`
   display: flex;
@@ -50,11 +53,17 @@ const Header = styled.div`
 
 export const App: React.FC = () => {
   const [form] = FormAntd.useForm<FormDto>();
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(0);
   const [hasDirectory, setDirectory] = useState<boolean>(false);
 
   const handleSubmit = async () => {
-    await IPC.api.invoke(ChannelIPC.getdirectory);
+    try {
+      const _form = validateForm(form);
+      await IPC.api.invoke(ChannelIPC.generate, _form);
+    } catch (error) {
+      console.error(error);
+      throw new Error(error as string);
+    }
   };
 
   const handleSelectDate = (date: Dayjs | null, name: string) => {
@@ -76,7 +85,7 @@ export const App: React.FC = () => {
   };
 
   const handleNextStep = async () => {
-    formValidation(form, step, () => {
+    validateFormOnStep(form, step, () => {
       setStep(step + 1);
     });
   };
@@ -137,12 +146,12 @@ export const App: React.FC = () => {
                     onChange={handleOnChange}
                     value={form.getFieldValue('city')}
                   />
-                  <Input
+                  <InputNumber
                     type="text"
                     name="zip"
                     placeholder="Zip"
-                    onChange={handleOnChange}
                     value={form.getFieldValue('zip')}
+                    onChange={(val) => handleSelect(val, 'zip')}
                   />
                 </Column>
                 <StepButtons

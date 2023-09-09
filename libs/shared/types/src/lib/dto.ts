@@ -1,39 +1,67 @@
+import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+
 export class FormDto {
+  @IsString()
+  @IsNotEmpty()
   firstName!: string;
-  lastName: string;
-  middleName: string;
 
-  street: string;
-  city: string;
-  zip: number;
+  @IsString()
+  @IsNotEmpty()
+  lastName!: string;
 
-  sex: string;
-  eyeColor: string;
-  hairColor: string;
-  height: number;
-  weight: number;
+  @IsString()
+  @IsNotEmpty()
+  middleName!: string;
 
-  id: string;
-  dob: object;
-  doi: object;
-  doe: object;
+  @IsString()
+  @IsNotEmpty()
+  street!: string;
 
-  constructor(form: FormDto) {
-    this.zip = form.zip;
-    this.city = form.city;
-    this.street = form.street;
-    this.lastName = form.lastName;
-    this.firstName = form.firstName;
-    this.middleName = form.middleName;
+  @IsString()
+  @IsNotEmpty()
+  city!: string;
 
-    this.id = form.id;
-    this.sex = form.sex;
-    this.eyeColor = form.eyeColor;
-    this.hairColor = form.hairColor;
-    this.height = form.height;
-    this.weight = form.weight;
-    this.dob = form.dob;
-    this.doi = form.doi;
-    this.doe = form.doe;
-  }
+  @IsNumber()
+  @IsNotEmpty()
+  zip!: number;
+
+  @IsString()
+  @IsIn(['male', 'female'])
+  sex!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  eyeColor!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  hairColor!: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  height!: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  weight!: number;
+
+  @IsString()
+  @IsNotEmpty()
+  id!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  dob!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  doi!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  doe!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  directory!: string;
 }

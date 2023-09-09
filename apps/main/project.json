@@ -8,6 +8,7 @@
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["barcode:build"],
       "options": {
         "platform": "node",
         "outputPath": "dist/apps/main",
