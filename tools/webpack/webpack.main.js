@@ -12,6 +12,7 @@ module.exports = {
         'libs/shared/constants/src/index.ts'
       ),
       '@ide/barcode': path.resolve('libs/barcode/src/index.ts'),
+      '@ide/photoshop': path.resolve('libs/photoshop/src/index.ts'),
       '@ide/nest': path.resolve('libs/nest/src/index.ts'),
       '@ide/shared/types': path.resolve('libs/shared/types/src/index.ts'),
     },

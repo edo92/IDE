@@ -1,13 +1,17 @@
 import * as path from 'path';
 import { exec } from 'child_process';
 
+type PhotoshopOptions = {
+  file?: string;
+};
+
 export class Photoshop {
   private readonly outputDir: string;
   private readonly scriptDir: string;
 
-  constructor(outputDir: string) {
+  constructor(outputDir: string, private readonly options?: PhotoshopOptions) {
     this.outputDir = path.resolve(outputDir);
-    this.scriptDir = path.resolve('libs/photoshop/src/script');
+    this.scriptDir = 'libs/photoshop/src/script';
   }
 
   public async start(): Promise<void> {
@@ -28,16 +32,30 @@ export class Photoshop {
       /**
        * osascript runScript.osascript  ./${SCRIPT_PATH} ./${INPUT_FILE_PATH} ./${OUTPUT_DIR}
        */
-      const scriptPath = path.join(this.scriptDir, 'run-app.osascript');
-      const phsScriptPath = path.join(this.scriptDir, 'photoshop.script.jsx');
-      const inputFilePath = path.join(
-        'lib/photoshop/src/assets/FILE.psd',
-        'input.txt'
+      const scriptPath = path.resolve(
+        path.join(this.scriptDir, 'run-app.osascript')
       );
 
-      await exec(
-        `osascript ${scriptPath} ${phsScriptPath} ${inputFilePath} ${this.outputDir}`
+      const phsScriptPath = path.resolve(
+        path.join(this.scriptDir, 'photoshop.script.jsx')
       );
+
+      const inputFilePath = path.resolve(
+        path.join(
+          'libs/photoshop/src/assets',
+          this.options?.file || 'template_front_back.psd'
+        )
+      );
+
+      await new Promise((resolve, reject) => {
+        const command = exec(
+          `osascript ${scriptPath} ${phsScriptPath} ${inputFilePath} ${this.outputDir}`
+        );
+
+        command.on('error', (err) => reject(err));
+        command.on('data', (data) => console.log(data));
+        command.on('close', (code) => resolve(code));
+      });
     } catch (error) {
       throw new Error(error as string);
     }

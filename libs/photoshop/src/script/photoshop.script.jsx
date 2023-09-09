@@ -12,6 +12,8 @@ const outputFileDir = arguments[1];
 const fileRef = new File(inputFilePath);
 const docRef = app.open(fileRef);
 
+changeTextLayerContent(docRef, 'B6250462', 'Hello World');
+
 /**
  *
  * Helpers

@@ -11,7 +11,11 @@
         "outputPath": "dist/libs/photoshop",
         "main": "libs/photoshop/src/index.ts",
         "tsConfig": "libs/photoshop/tsconfig.lib.json",
-        "assets": ["libs/photoshop/*.md"]
+        "assets": [
+          "libs/photoshop/*.md",
+          "libs/photoshop/src/assets/**/*",
+          "libs/photoshop/src/scripts/**/*"
+        ]
       }
     },
     "lint": {

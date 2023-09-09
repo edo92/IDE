@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { Form as FormAntd } from 'antd';
+import { Form as FormAntd, Space } from 'antd';
 import type { Dayjs } from 'dayjs';
 
 import { IPC } from '@ide/shared/util';
@@ -30,6 +30,7 @@ import {
   validateForm,
   validateFormOnStep,
 } from '../components/form/form-validator';
+import { Loading } from '../components/loading';
 
 const Container = styled.div`
   display: flex;
@@ -55,14 +56,18 @@ export const App: React.FC = () => {
   const [form] = FormAntd.useForm<FormDto>();
   const [step, setStep] = useState(0);
   const [directory, setDirectory] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     try {
       const _form = validateForm(form);
-      await IPC.api.invoke(ChannelIPC.generate, {
+      setLoading(true);
+      const response = await IPC.api.invoke(ChannelIPC.generate, {
         form: _form,
         directory,
       });
+      setLoading(false);
+      console.log('-----response', response);
     } catch (error) {
       console.error(error);
       throw new Error(error as string);
@@ -257,6 +262,10 @@ export const App: React.FC = () => {
                   Save Output To
                 </Button>
               </GroupItem>
+
+              <Loading spinning={loading} />
+              <Space />
+
               <Button
                 type="primary"
                 onClick={handleSubmit}
