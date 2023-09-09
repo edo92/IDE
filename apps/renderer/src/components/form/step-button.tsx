@@ -14,27 +14,23 @@ const StepButtonsWrapper = styled.div`
 
 type StepButtonProps = {
   step: number;
-  setStep: (n: number) => void;
+  next: () => void;
+  back: () => void;
 };
 
-export const StepButtons = ({ setStep, step }: StepButtonProps) => (
+export const StepButtons = ({ next, back, step }: StepButtonProps) => (
   <StepButtonsWrapper>
     <Button
       size="large"
       type="default"
       disabled={step === 0}
       style={{ color: '#1677ff' }}
-      onClick={() => setStep(step - 1)}
+      onClick={back}
     >
       Back
     </Button>
 
-    <Button
-      size="large"
-      type="primary"
-      disabled={step === 3}
-      onClick={() => setStep(step + 1)}
-    >
+    <Button size="large" type="primary" disabled={step === 3} onClick={next}>
       Next
     </Button>
   </StepButtonsWrapper>

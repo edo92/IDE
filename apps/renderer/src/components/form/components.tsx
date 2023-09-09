@@ -54,13 +54,15 @@ export const DatePicker = styled(DatePickerAntd).attrs({
   }
 `;
 
-export const FormItem = styled(FormAntd.Item)`
+export const FormGroup = styled.div`
   width: 70%;
   padding-top: 1rem;
-  .ant-form-item-control-input-content {
-    gap: 10px;
-    display: inline-grid;
-  }
+  gap: 10px;
+  display: inline-grid;
+`;
+
+export const FormItem = styled(FormAntd.Item)`
+  margin: 0;
 `;
 
 export const Space = styled.div`
@@ -101,7 +103,7 @@ export const Button = styled(ButtonAntd).attrs({
   width: 100% !important;
 `;
 
-export const FormGroup = ({
+export const GroupItem = ({
   children,
   title,
 }: {

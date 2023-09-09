@@ -6,7 +6,7 @@ import type { Dayjs } from 'dayjs';
 import { IPC } from '@ide/shared/util';
 import { ChannelIPC } from '@ide/shared/constants';
 import { UploadOutlined } from '@ant-design/icons';
-import { SelectDirectory } from '@ide/shared/types';
+import { FormDto, SelectDirectory } from '@ide/shared/types';
 
 import {
   Form,
@@ -15,16 +15,18 @@ import {
   Button,
   Column,
   Progress,
-  FormItem,
   FormGroup,
+  GroupItem,
   sexOptions,
   DatePicker,
   StepButtons,
   InputNumber,
   eyeColorOptions,
   hairColorOptions,
+  FormItem,
 } from '../components/form';
 import { Steps } from '../components/step';
+import { formValidation } from '../components/form/form-validator';
 
 const Container = styled.div`
   display: flex;
@@ -47,15 +49,16 @@ const Header = styled.div`
 `;
 
 export const App: React.FC = () => {
-  const [form] = FormAntd.useForm();
-  const [step, setStep] = useState(0);
+  const [form] = FormAntd.useForm<FormDto>();
+  const [step, setStep] = useState(2);
+  const [hasDirectory, setDirectory] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     await IPC.api.invoke(ChannelIPC.getdirectory);
   };
 
-  const handleSelectDate = (date: Dayjs | null) => {
-    form.setFieldValue('date', JSON.stringify(date));
+  const handleSelectDate = (date: Dayjs | null, name: string) => {
+    form.setFieldValue(name, date);
   };
 
   const handleSelect = (value: unknown, name: string) => {
@@ -69,6 +72,13 @@ export const App: React.FC = () => {
   const selectDirectory = async () => {
     const dir = await IPC.api.invoke<SelectDirectory>(ChannelIPC.getdirectory);
     form.setFieldValue('directory', dir.filePaths[0]);
+    setDirectory(true);
+  };
+
+  const handleNextStep = async () => {
+    formValidation(form, step, () => {
+      setStep(step + 1);
+    });
   };
 
   return (
@@ -80,34 +90,44 @@ export const App: React.FC = () => {
 
         <Form form={form}>
           <Steps step={step}>
-            <FormItem>
-              <FormGroup title="Info">
-                <Input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  onChange={handleOnChange}
-                />
-                <Input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  onChange={handleOnChange}
-                />
-                <Input
-                  type="text"
-                  name="middleName"
-                  placeholder="Middle Name"
-                  onChange={handleOnChange}
-                />
-              </FormGroup>
+            <FormGroup>
+              <GroupItem title="Info">
+                <FormItem>
+                  <Input
+                    type="text"
+                    name="firstName"
+                    placeholder="First Name"
+                    onChange={handleOnChange}
+                    value={form.getFieldValue('firstName')}
+                  />
+                </FormItem>
+                <FormItem>
+                  <Input
+                    type="text"
+                    name="lastName"
+                    placeholder="Last Name"
+                    onChange={handleOnChange}
+                    value={form.getFieldValue('lastName')}
+                  />
+                </FormItem>
+                <FormItem>
+                  <Input
+                    type="text"
+                    name="middleName"
+                    placeholder="Middle Name"
+                    onChange={handleOnChange}
+                    value={form.getFieldValue('middleName')}
+                  />
+                </FormItem>
+              </GroupItem>
 
-              <FormGroup title="Address">
+              <GroupItem title="Address">
                 <Input
                   type="text"
                   name="street"
                   placeholder="Street"
                   onChange={handleOnChange}
+                  value={form.getFieldValue('street')}
                 />
                 <Column>
                   <Input
@@ -115,67 +135,108 @@ export const App: React.FC = () => {
                     name="city"
                     placeholder="City"
                     onChange={handleOnChange}
+                    value={form.getFieldValue('city')}
                   />
                   <Input
                     type="text"
                     name="zip"
                     placeholder="Zip"
                     onChange={handleOnChange}
+                    value={form.getFieldValue('zip')}
                   />
                 </Column>
-                <StepButtons step={step} setStep={setStep} />
-              </FormGroup>
-            </FormItem>
+                <StepButtons
+                  step={step}
+                  next={handleNextStep}
+                  back={() => setStep(step - 1)}
+                />
+              </GroupItem>
+            </FormGroup>
 
-            <FormItem>
-              <FormGroup title="Appearance">
+            <FormGroup>
+              <GroupItem title="Appearance">
                 <Column>
-                  <Select
-                    placeholder="Person's Sex"
-                    options={sexOptions}
-                    onChange={(val) => handleSelect(val, 'sex')}
-                  />
-                  <Select
-                    placeholder="Eye Color"
-                    options={eyeColorOptions}
-                    onChange={(val) => handleSelect(val, 'eyeColor')}
-                  />
-                  <Select
-                    placeholder="Hair Color"
-                    options={hairColorOptions}
-                    onChange={(val) => handleSelect(val, 'hairColor')}
-                  />
+                  <FormItem>
+                    <Select
+                      placeholder="Person's Sex"
+                      options={sexOptions}
+                      value={form.getFieldValue('sex')}
+                      onChange={(val) => handleSelect(val, 'sex')}
+                    />
+                  </FormItem>
+                  <FormItem>
+                    <Select
+                      placeholder="Eye Color"
+                      options={eyeColorOptions}
+                      value={form.getFieldValue('eyeColor')}
+                      onChange={(val) => handleSelect(val, 'eyeColor')}
+                    />
+                  </FormItem>
+                  <FormItem>
+                    <Select
+                      placeholder="Hair Color"
+                      options={hairColorOptions}
+                      value={form.getFieldValue('hairColor')}
+                      onChange={(val) => handleSelect(val, 'hairColor')}
+                    />
+                  </FormItem>
                 </Column>
+
                 <Column>
                   <InputNumber
                     name="height"
                     placeholder="Height"
+                    value={form.getFieldValue('height')}
                     onChange={(val) => handleSelect(val, 'height')}
                   />
+                  <InputNumber
+                    name="weight"
+                    placeholder="Weight"
+                    value={form.getFieldValue('weight')}
+                    onChange={(val) => handleSelect(val, 'weight')}
+                  />
                 </Column>
-              </FormGroup>
+              </GroupItem>
 
-              <FormGroup title="ID Info">
-                <Input type="text" placeholder="ID Number" />
+              <GroupItem title="ID Info">
+                <FormItem>
+                  <Input
+                    name="id"
+                    type="text"
+                    placeholder="ID Number"
+                    onChange={handleOnChange}
+                    value={form.getFieldValue('height')}
+                  />
+                </FormItem>
                 <Column>
                   <DatePicker
+                    name="dob"
                     placeholder="Date of Birth"
-                    onChange={handleSelectDate}
+                    value={form.getFieldValue('dob')}
+                    onChange={(v) => handleSelectDate(v, 'dob')}
                   />
                   <DatePicker
+                    name="doi"
                     placeholder="Date of Issue"
-                    onChange={handleSelectDate}
+                    value={form.getFieldValue('doi')}
+                    onChange={(v) => handleSelectDate(v, 'doi')}
                   />
                   <DatePicker
+                    name="doe"
                     placeholder="Date of Expiry"
-                    onChange={handleSelectDate}
+                    value={form.getFieldValue('doe')}
+                    onChange={(v) => handleSelectDate(v, 'doe')}
                   />
                 </Column>
-              </FormGroup>
-              <StepButtons step={step} setStep={setStep} />
-            </FormItem>
-            <FormItem>
-              <FormGroup title="Select Folder">
+              </GroupItem>
+              <StepButtons
+                step={step}
+                next={handleNextStep}
+                back={() => setStep(step - 1)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <GroupItem title="Select Folder">
                 <Button
                   id="upload-bttn"
                   onClick={selectDirectory}
@@ -183,15 +244,15 @@ export const App: React.FC = () => {
                 >
                   Save Output To
                 </Button>
-              </FormGroup>
+              </GroupItem>
               <Button
                 type="primary"
                 onClick={handleSubmit}
-                disabled={!form.getFieldValue('directory')?.length}
+                disabled={!hasDirectory}
               >
                 Submit
               </Button>
-            </FormItem>
+            </FormGroup>
           </Steps>
         </Form>
       </Wrapper>
