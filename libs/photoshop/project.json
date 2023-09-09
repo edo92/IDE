@@ -1,0 +1,26 @@
+{
+  "name": "photoshop",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/photoshop/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/photoshop",
+        "main": "libs/photoshop/src/index.ts",
+        "tsConfig": "libs/photoshop/tsconfig.lib.json",
+        "assets": ["libs/photoshop/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/photoshop/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,6 @@
+#!/bin/osascript
+
+
+tell application "Adobe Photoshop 2023" -- open up Photoshop
+    do javascript "#include /Users/eduardjacobs/Desktop/psh-script/index.jsx"
+end tell -- close Photoshop

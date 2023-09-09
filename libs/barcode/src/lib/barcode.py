@@ -63,7 +63,7 @@ rawcode = PDF417_Code(input_form)
 barcode = BarcodeGenerator(directory_path)
 
 # Generated
-auto_generated_code =''
+auto_generated_code ='636014040002DL00410288ZC03290048DLDCAC'
 code = rawcode.generate(auto_generated_code)
 
 # Barcode

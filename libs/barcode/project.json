@@ -8,13 +8,11 @@
     "install": {
       "command": "python3 -m pip install -r libs/barcode/src/lib/requirements.txt"
     },
-    "run": {
-      "command": "python3 libs/barcode/src/lib/barcode.py"
-    },
 
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
+      "dependsOn": ["^install"],
       "options": {
         "outputPath": "dist/libs/barcode",
         "main": "libs/barcode/src/index.ts",
