@@ -1,9 +1,12 @@
+#include "json2.js" 
+
 /**
  *
  * Declarations
  */
 const inputFilePath = arguments[0];
 const outputFileDir = arguments[1];
+const inputForm  = JSON.parse(arguments[2]);
 
 /**
  *
@@ -12,7 +15,15 @@ const outputFileDir = arguments[1];
 const fileRef = new File(inputFilePath);
 const docRef = app.open(fileRef);
 
-changeTextLayerContent(docRef, 'B6250462', 'Hello World');
+changeTextLayerContent(docRef, 'B6250462', inputForm['id']);
+changeTextLayerContent(docRef, 'PSD', inputForm['lastName']);
+changeTextLayerContent(docRef, 'BLANK', inputForm['firstName']);
+changeTextLayerContent(docRef, 'M', "X");
+changeTextLayerContent(docRef, `5'-05"`, inputForm['height']);
+changeTextLayerContent(docRef, '160 LB', inputForm['weight']);
+changeTextLayerContent(docRef, 'BLK', inputForm['hairColor']);
+changeTextLayerContent(docRef, 'BROWN', inputForm['eyeColor']);
+
 
 /**
  *

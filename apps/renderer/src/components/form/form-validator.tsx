@@ -21,7 +21,11 @@ export function validateForm(form: FormInstance<FormDto>) {
   const fileds = [...formFileds[0], ...formFileds[1]];
 
   const formItems = fileds.map((field) => {
-    return { [field]: form.getFieldValue(field) };
+    const value = form.getFieldValue(field);
+    if (typeof value === 'string') {
+      return { [field]: value.trim().toUpperCase() };
+    }
+    return { [field]: value };
   });
   const _form: FormDto = Object.assign({}, ...formItems);
 

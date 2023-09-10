@@ -1,10 +1,10 @@
 export const sexOptions = [
   {
-    value: 'MALE',
+    value: 'M',
     label: 'Male',
   },
   {
-    value: 'FEMALE',
+    value: 'F',
     label: 'Female',
   },
 ];

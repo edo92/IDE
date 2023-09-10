@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "none",
+    "strict": true,
+    "noLib": true,
+    "types": ["./index.d.ts"]
+  },
+  "exclude": ["node_modules"],
+  "include": ["./script/**/*.jsx"]
+}

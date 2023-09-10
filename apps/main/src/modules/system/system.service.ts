@@ -15,7 +15,7 @@ export class SystemService {
       const barcode = new BarcodeGenerator(form, directory);
 
       await barcode.generate();
-      await photoshop.start();
+      await photoshop.start(form);
 
       return { status: 'OK' };
     } catch (error) {
